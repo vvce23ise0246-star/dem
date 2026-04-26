@@ -5,7 +5,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t srajan106/myapp:latest .'
+                bat 'docker build -t srajju0723b/myapp:latest .'
             }
         }
 
@@ -19,7 +19,7 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                bat 'docker push srajan106/myapp:latest'
+                bat 'docker push srajju0723b/myapp:latest'
             }
         }
     }
