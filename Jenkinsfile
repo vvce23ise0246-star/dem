@@ -1,30 +1,41 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_IMAGE = "srajju0723b/myapp"
+    }
+
     stages {
 
-        stage('Build Docker Image') {
+        stage('Clone Repository') {
             steps {
-                bat 'docker build -t srajju0723b/myapp:latest .'
+                git 'https://github.com/vvce23ise0246-star/dem.git'
             }
         }
 
-        stage('Login to Docker Hub') {
+        stage('Build Docker Image') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                    bat 'echo %PASS% | docker login -u %USER% --password-stdin'
+                script {
+                    docker.build("${DOCKER_IMAGE}:latest")
                 }
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                bat 'docker push srajju0723b/myapp:latest'
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-creds') {
+                        docker.image("${DOCKER_IMAGE}:latest").push()
+                    }
+                }
             }
         }
     }
 
     post {
+        success {
+            echo 'Image successfully built and pushed'
+        }
         failure {
             echo 'Pipeline failed'
         }
