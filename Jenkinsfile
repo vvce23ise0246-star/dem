@@ -8,10 +8,10 @@ pipeline {
     stages {
 
         stage('Clone Repository') {
-            steps {
-                git 'https://github.com/vvce23ise0246-star/dem.git'
-            }
-        }
+    steps {
+        git branch: 'main', url: 'https://github.com/vvce23ise0246-star/dem.git'
+    }
+}
 
         stage('Build Docker Image') {
             steps {
